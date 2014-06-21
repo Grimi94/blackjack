@@ -73,7 +73,7 @@ class window.Hand extends Backbone.Collection
     # else
     #   return false
     #
-    console.log(@at(0))
+    # console.log(@at(0))
     if @at(0).get('value') is 1 and @at(1).get('value') is 10 or
     @at(0).get('value') is 10 and @at(1).get('value') is 1
       return true

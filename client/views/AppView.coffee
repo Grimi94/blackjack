@@ -12,10 +12,10 @@ class window.AppView extends Backbone.View
     # when player stands : @model.get('dealerHand').dealerFlip()
 
   initialize: ->
-    playerBlackJack = @model.get('playerHand').hasBlackJack()
-    dealerBlackJack = @model.get('dealerHand').hasBlackJack()
-    console.log(playerBlackJack)
-    if (playerBlackJack or dealerBlackJack) then console.log('foo')
+    @playerBlackJack = @model.get('playerHand').hasBlackJack()
+    @dealerBlackJack = @model.get('dealerHand').hasBlackJack()
+    # console.log(playerBlackJack)
+    if (@playerBlackJack or @dealerBlackJack) then @renderBlackJack()
     @model.get('playerHand').on('stand', => @model.get('dealerHand').dealerPlay())
     @model.get('playerHand').on('bust', =>
       @model.playerBust()
@@ -24,13 +24,22 @@ class window.AppView extends Backbone.View
 
     @render()
 
+  renderBlackJack: ->
+    @model.get('dealerHand').dealerFlip()
+    if @playerBlackJack and @dealerBlackJack then setTimeout((=>alert('Push!')), 20)
+    else if @playerBlackJack then setTimeout((=>alert('You have a blackjack !!')), 20)
+    else if @dealerBlackJack then setTimeout((=>alert('Dealer has a blackjack !!')), 20)
+
+
   renderWinner: ->
     winner = @model.getWinner()
-    if winner.indexOf('dealerBusts') > -1 then alert('Dealer got busted, congratulations!!')
-    else alert(winner + ' has won!!')
+    @render()
+    if winner.indexOf('dealerBusts') > -1 then setTimeout((=>alert('Dealer got busted, congratulations!!')), 20)
+    else setTimeout((=>alert(winner + ' has won!!')), 20)
 
   renderPlayerBust: ->
-    alert('You have been busted! :(')
+    @render()
+    setTimeout((=>alert('You have been busted! :(')), 20)
 
   render: ->
     @$el.children().detach()
