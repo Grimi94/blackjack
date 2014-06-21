@@ -14,11 +14,10 @@ class window.Hand extends Backbone.Collection
     if @scores()[0] > 21 then do @bust
 
   bust: ->
-    #check if dealer
-    @trigger('bust')
+    if !@isDealer
+      @trigger('bust')
+      @isBust = true
 
-    alert('You are dead')
-    @isBust = true
 
   dealerFlip: ->
     @at(0).flip()
@@ -42,29 +41,44 @@ class window.Hand extends Backbone.Collection
     playOn = true
     if @scores().length is 1
       if @scores()[0] > 16
-       # @endGame
+        @trigger('endGame')
         playOn = false
     else
       if @scores()[0] > 16
-        #@endGame
+        @trigger('endGame')
         playOn = false
       else if @scores()[1] > 17 and @scores()[1] < 22
-     #   @endGame
+        @trigger('endGame')
         playOn = false
     while playOn
       do @hit
       if @scores().length is 1
         if @scores()[0] > 16
-        #  @endGame
+          @trigger('endGame')
           playOn = false
       else
         if @scores()[0] > 16
-       #   @endGame
+          @trigger('endGame')
           playOn = false
         else if @scores()[1] > 17 and @scores()[1] < 22
-          @endGame
+          @trigger('endGame')
           playOn = false
 
+  hasBlackJack: ->
+    # score = @reduce (score, card) ->
+    #   score + card.get 'value'
+    # console.log([score])
+    # if score is 21
+    #   return true
+    # else
+    #   return false
+    #
+    console.log(@at(0))
+    if @at(0).get('value') is 1 and @at(1).get('value') is 10 or
+    @at(0).get('value') is 10 and @at(1).get('value') is 1
+      return true
+    else
+      return false
 
 
   scores: ->
